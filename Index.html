@@ -1,0 +1,23 @@
+<head><link rel="stylesheet" href="Index.css"></head>
+<h1>Leo</h1>
+<h6>Leo</h6>
+<p1><i>Bananer</i></p1>
+<form id="chatForm">
+    <input type="text" id="usernameInput" placeholder="Enter your name">
+    <input type="text" id="roomnameInput" placeholder="Enter room name">
+    <button type="submit">Send</button>
+</form>
+
+<img width="400" src="https://leisurepoolsusa.com/wp-content/uploads/2020/06/best-type-of-swimming-pool-for-my-home_2.jpg">
+
+<script>
+    document.getElementById('chatForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const usernameInput = document.getElementById('usernameInput');
+        const username = usernameInput.value;
+        const roomnameInput = document.getElementById('roomnameInput');
+        const roomname = roomnameInput.value;
+
+        window.location.href = `./chat.html?roomId=${roomname}&username=${username}`;
+    });
+</script>
