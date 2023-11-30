@@ -1,4 +1,8 @@
 <head><link rel="stylesheet" href="Index.css"></head>
+<h1><b>ROOM LIST</b></h1>
+<form><p1>Søg</p1><input id="searchRooms"></form>
+<ul id="roomList"></ul>
+</ul>
 <h1><b>Chat Room</b></h1>
 <div id="chat"></div>
 <form id="chatForm">
@@ -14,7 +18,7 @@
     }
 
     function fetchData(roomId, username) {
-        fetch(`http://localhost:3000/room/${roomId}`)
+        fetch(`https://chat-app-albertslund-2023-dbe996610a5f.herokuapp.com/room/${roomId}`)
             .then(response => response.json())
             .then(data => {
                 var chatElement = document.getElementById('chat');
@@ -32,41 +36,42 @@
                 console.error('Error fetching data: ' + error);
             });
     }
-
-    function sendMessage(roomId, message, username) {
-        fetch(`http://localhost:3000/room/${roomId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ message, user: username }),
-        })
+    function sendMessage(roomId, message, username, password) {
+            fetch(`https://chat-app-albertslund-2023-dbe996610a5f.herokuapp.com/room/${roomId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message, user: username, password }),
+            })
             .then(response => {
                 if (response.ok) {
                     fetchData(roomId, username);
+                } else {
+                    alert('Failed to send message. Incorrect password.');
                 }
             })
             .catch(error => {
                 console.error('Error sending message: ' + error);
             });
-    }
-
-    document.getElementById('chatForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-        const messageInput = document.getElementById('messageInput');
-        const message = messageInput.value;
-        if (message) {
-            sendMessage(roomId, message, username);
-            messageInput.value = '';
         }
-    });
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const roomId = urlParams.get('roomId');
-    const username = urlParams.get('username');
+        document.getElementById('chatForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value;
+            if (message) {
+                sendMessage(roomId, message, username, password);
+                messageInput.value = '';
+            }
+        });
 
-    fetchData(roomId, username);
+        const urlParams = new URLSearchParams(window.location.search);
+        const roomId = urlParams.get('roomId');
+        const username = urlParams.get('username');
+        const password = urlParams.get('password'); // Retrieve the password from URL
 
+        fetchData(roomId, username);
     setInterval(function () {
         fetchData(roomId, username);
     }, 1000);
@@ -79,7 +84,7 @@
         var usernameLabel = document.getElementById('usernameLabel');
         usernameLabel.innerText = `Username: ${username}`;
 
-        fetch('http://localhost:3000/rooms')
+        fetch('https://chat-app-albertslund-2023-dbe996610a5f.herokuapp.com/rooms')
             .then(response => response.json())
             .then(data => {
                 var roomList = document.getElementById('roomList');
@@ -87,7 +92,7 @@
                 data.forEach(room => {
                     // Create a list item for each chat room
                     var listItem = document.createElement('li');
-                    listItem.innerHTML = `<a href="?roomId=${room.roomId}&username=${username}">${room.roomId}</a>`;
+                    listItem.innerHTML = `<a href="?roomId=${room.roomId}&username=${username}">${room.roomId.slice(0, 25)}</a>`;
                     roomList.appendChild(listItem);
                 });
             })
@@ -98,4 +103,25 @@
 
     // Fetch and display the list of chat rooms when the page loads
     fetchRoomList();
+</script>
+<script>
+    // Get references to elements
+    const searchInput = document.getElementById('searchRooms');
+    const roomList = document.getElementById('roomList');
+    
+    // Event listener for search input changes
+    searchInput.addEventListener('input', function () {
+        const searchTerm = searchInput.value.toLowerCase();
+        const roomItems = roomList.getElementsByTagName('li');
+        
+        // Loop through each room item and hide/show based on the search term
+        Array.from(roomItems).forEach(item => {
+            const roomText = item.textContent.toLowerCase();
+            if (roomText.includes(searchTerm)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
 </script>

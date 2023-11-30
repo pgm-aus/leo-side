@@ -1,8 +1,11 @@
-body {
+body { background-image: url("https://vejenforsyning.dk/files/vejenforsyning/vand/vand.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 1800px;
     background-color: white;
     color:black
 }
-#sent {color:blue;font-size: 20px;}
+#sent {color:blue;font-size: 20px; text-align: right;}
 #received {color: green;font-size: 20px;}
 #chat {
     overflow-y: scroll;
@@ -10,3 +13,5 @@ body {
     display: flex;
     flex-direction: column-reverse;
     }
+#roomList {max-height: 100px; overflow-y: scroll;}
+

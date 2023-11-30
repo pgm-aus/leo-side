@@ -4,6 +4,7 @@
 <p1><i>Bananer</i></p1>
 <form id="chatForm">
     <input type="text" id="usernameInput" placeholder="Enter your name">
+    <input type="password" id="passwordInput" placeholder="Enter your password">
     <input type="text" id="roomnameInput" placeholder="Enter room name">
     <button type="submit">Send</button>
 </form>
@@ -17,7 +18,8 @@
         const username = usernameInput.value;
         const roomnameInput = document.getElementById('roomnameInput');
         const roomname = roomnameInput.value;
-
-        window.location.href = `./chat.html?roomId=${roomname}&username=${username}`;
+        const passwordInput = document.getElementById('passwordInput');
+        const password= passwordInput.value;
+        window.location.href = `./chat.html?roomId=${roomname}&username=${username}&password=${password}`;
     });
 </script>
